@@ -49,9 +49,10 @@ public class GroupManager implements Serializable {
      * @throws IllegalArgumentException if the new name conflicts with an existing group
      */
     public void updateGroup(Group group) {
-        // Check if the new name conflicts with an existing group
+        // Compare by reference (not equals()) so that renaming a group in place doesn't let it
+        // slip past its own conflict check once its name matches what we're comparing against.
         for (Group existingGroup : groups) {
-            if (!existingGroup.equals(group) && existingGroup.getName().equalsIgnoreCase(group.getName())) {
+            if (existingGroup != group && existingGroup.getName().equalsIgnoreCase(group.getName())) {
                 throw new IllegalArgumentException("A group with the name '" + group.getName() + "' already exists.");
             }
         }
