@@ -1,5 +1,8 @@
 # Contact Groups Java Project
 
+[![Build & Test](https://github.com/Emberizaelysee/Contact-Groups-Java-Project/actions/workflows/build.yml/badge.svg)](https://github.com/Emberizaelysee/Contact-Groups-Java-Project/actions/workflows/build.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 A desktop contact management application built with Java Swing. Users can create, search, and
 sort contacts, and organize them into named groups.
 
