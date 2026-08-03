@@ -1,0 +1,18 @@
+# Maven
+target/
+
+# Runtime persistence files created by the app
+*.dat
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.classpath
+.project
+.settings/
+bin/
+
+# OS
+.DS_Store
+Thumbs.db
