@@ -1,16 +1,13 @@
 package model;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Represents a contact in the contact management system.
- * This class implements Serializable to allow for persistent storage of contact data.
  * Each contact has basic information (first name, last name, city) and can have multiple phone numbers.
  */
-public class Contact implements Serializable {
-	private static final long serialVersionUID = 1L;
+public class Contact {
 
     /**
      * properties of the contact

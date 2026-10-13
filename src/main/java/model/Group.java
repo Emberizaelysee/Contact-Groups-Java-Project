@@ -1,18 +1,14 @@
 package model;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Represents a group of contacts in the contact management system.
- * This class implements Serializable to allow for persistent storage of group data.
  * A group has a name, description, and can contain multiple contacts.
  * Groups are uniquely identified by their name.
  */
-public class Group implements Serializable {
-	private static final long serialVersionUID = 1L;
-
+public class Group {
 
     /**
      * properties of the group

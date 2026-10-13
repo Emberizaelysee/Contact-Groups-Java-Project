@@ -1,60 +1,79 @@
 package util;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 import model.ContactManager;
 import model.GroupManager;
 
-import java.io.*;
-import javax.swing.JOptionPane;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 /**
- * Manages the persistence of contacts and groups data using file serialization.
+ * Manages the persistence of contacts and groups data as JSON files.
  * This class handles saving and loading of ContactManager and GroupManager objects
  * to and from files.
  */
 public class FileManager {
     /** File name for storing contacts data */
-    private static final String CONTACTS_FILE = "contacts.dat";
-    
+    private static final String CONTACTS_FILE = "contacts.json";
+
     /** File name for storing groups data */
-    private static final String GROUPS_FILE = "groups.dat";
+    private static final String GROUPS_FILE = "groups.json";
+
+    private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    private final Path contactsFile;
+    private final Path groupsFile;
 
     /**
-     * Constructs a new FileManager.
-     * This constructor is always public to allow instantiation from other packages.
+     * Constructs a new FileManager that persists to the current working directory.
      */
     public FileManager() {
-        // Initialize file paths or any other necessary setup
+        this(Path.of(""));
     }
 
     /**
-     * Saves the contacts data to a file using object serialization.
+     * Constructs a new FileManager that persists contacts and groups inside the given directory.
+     * Mainly useful for tests, which can point this at a temporary directory.
+     *
+     * @param directory The directory in which contacts.json and groups.json will be read/written
+     */
+    public FileManager(Path directory) {
+        this.contactsFile = directory.resolve(CONTACTS_FILE);
+        this.groupsFile = directory.resolve(GROUPS_FILE);
+    }
+
+    /**
+     * Saves the contacts data to a file as JSON.
      * If an error occurs during saving, it will be displayed to the user.
      *
      * @param contactManager The ContactManager object to be saved
      */
     public void saveContacts(ContactManager contactManager) {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(CONTACTS_FILE))) {
-            oos.writeObject(contactManager);
-        } catch (IOException e) {
-            String message = "Error saving contacts: " + e.getMessage();
-            System.err.println(message);
-            JOptionPane.showMessageDialog(null, message, "Error Saving Contacts", JOptionPane.ERROR_MESSAGE);
-        }
+        save(contactManager, contactsFile, "Error Saving Contacts");
     }
 
     /**
-     * Saves the groups data to a file using object serialization.
+     * Saves the groups data to a file as JSON.
      * If an error occurs during saving, it will be displayed to the user.
      *
      * @param groupManager The GroupManager object to be saved
      */
     public void saveGroups(GroupManager groupManager) {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(GROUPS_FILE))) {
-            oos.writeObject(groupManager);
+        save(groupManager, groupsFile, "Error Saving Groups");
+    }
+
+    private void save(Object data, Path file, String errorTitle) {
+        try (Writer writer = Files.newBufferedWriter(file, StandardCharsets.UTF_8)) {
+            gson.toJson(data, writer);
         } catch (IOException e) {
-            String message = "Error saving groups: " + e.getMessage();
+            String message = "Error saving data: " + e.getMessage();
             System.err.println(message);
-            JOptionPane.showMessageDialog(null, message, "Error Saving Groups", JOptionPane.ERROR_MESSAGE);
+            Dialogs.error(message, errorTitle);
         }
     }
 
@@ -66,14 +85,7 @@ public class FileManager {
      * @return The loaded ContactManager or a new empty one if loading fails
      */
     public ContactManager loadContacts() {
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(CONTACTS_FILE))) {
-            return (ContactManager) ois.readObject();
-        } catch (IOException | ClassNotFoundException e) {
-            String message = "Could not load contacts file. Creating new contacts file.";
-            System.out.println(message);
-            JOptionPane.showMessageDialog(null, message, "Loading Contacts", JOptionPane.INFORMATION_MESSAGE);
-            return new ContactManager();
-        }
+        return load(contactsFile, ContactManager.class, "Loading Contacts", "contacts", ContactManager::new);
     }
 
     /**
@@ -84,13 +96,18 @@ public class FileManager {
      * @return The loaded GroupManager or a new empty one if loading fails
      */
     public GroupManager loadGroups() {
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(GROUPS_FILE))) {
-            return (GroupManager) ois.readObject();
-        } catch (IOException | ClassNotFoundException e) {
-            String message = "Could not load groups file. Creating new groups file.";
+        return load(groupsFile, GroupManager.class, "Loading Groups", "groups", GroupManager::new);
+    }
+
+    private <T> T load(Path file, Class<T> type, String infoTitle, String dataName, java.util.function.Supplier<T> fallback) {
+        try (Reader reader = Files.newBufferedReader(file, StandardCharsets.UTF_8)) {
+            T result = gson.fromJson(reader, type);
+            return result != null ? result : fallback.get();
+        } catch (IOException | JsonSyntaxException e) {
+            String message = "Could not load " + dataName + " file. Creating new " + dataName + " file.";
             System.out.println(message);
-            JOptionPane.showMessageDialog(null, message, "Loading Groups", JOptionPane.INFORMATION_MESSAGE);
-            return new GroupManager();
+            Dialogs.info(message, infoTitle);
+            return fallback.get();
         }
     }
 }

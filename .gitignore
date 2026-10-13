@@ -3,6 +3,8 @@ target/
 
 # Runtime persistence files created by the app
 *.dat
+contacts.json
+groups.json
 
 # IDE
 .idea/

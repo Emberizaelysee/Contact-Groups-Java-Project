@@ -1,16 +1,13 @@
 package model;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Manages a collection of groups in the contact management system.
- * This class implements Serializable to allow for persistent storage of the group collection.
  * Provides functionality for adding, updating, deleting, and retrieving groups.
  */
-public class GroupManager implements Serializable {
-	private static final long serialVersionUID = 1L;
+public class GroupManager {
 
     /** List of groups managed by this GroupManager */
     private List<Group> groups;
