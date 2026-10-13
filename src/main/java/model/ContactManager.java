@@ -1,6 +1,5 @@
 package model;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -8,11 +7,9 @@ import java.util.stream.Collectors;
 
 /**
  * Manages a collection of contacts in the contact management system.
- * This class implements Serializable to allow for persistent storage of the contact collection.
  * Provides functionality for adding, updating, deleting, searching, and sorting contacts.
  */
-public class ContactManager implements Serializable {
-	private static final long serialVersionUID = 1L;
+public class ContactManager {
 
     /** List of contacts managed by this ContactManager */
     private List<Contact> contacts;

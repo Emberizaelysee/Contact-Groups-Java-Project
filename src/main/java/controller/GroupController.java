@@ -1,10 +1,10 @@
 package controller;
 
 import model.*;
+import util.Dialogs;
 import util.FileManager;
 
 import java.util.List;
-import javax.swing.JOptionPane;
 
 /**
  * Controller class responsible for managing group-related operations.
@@ -42,11 +42,10 @@ public class GroupController {
             fileManager.saveGroups(groupManager);
             return true;
         } catch (IllegalArgumentException e) {
-            JOptionPane.showMessageDialog(null, e.getMessage(), "Error Adding Group", JOptionPane.ERROR_MESSAGE);
+            Dialogs.error(e.getMessage(), "Error Adding Group");
             return false;
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "An unexpected error occurred while adding the group.", 
-                "Error", JOptionPane.ERROR_MESSAGE);
+            Dialogs.error("An unexpected error occurred while adding the group.", "Error");
             return false;
         }
     }
@@ -65,11 +64,10 @@ public class GroupController {
             fileManager.saveGroups(groupManager);
             return true;
         } catch (IllegalArgumentException e) {
-            JOptionPane.showMessageDialog(null, e.getMessage(), "Error Updating Group", JOptionPane.ERROR_MESSAGE);
+            Dialogs.error(e.getMessage(), "Error Updating Group");
             return false;
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "An unexpected error occurred while updating the group.", 
-                "Error", JOptionPane.ERROR_MESSAGE);
+            Dialogs.error("An unexpected error occurred while updating the group.", "Error");
             return false;
         }
     }
@@ -88,11 +86,10 @@ public class GroupController {
             fileManager.saveGroups(groupManager);
             return true;
         } catch (IllegalArgumentException e) {
-            JOptionPane.showMessageDialog(null, e.getMessage(), "Error Deleting Group", JOptionPane.ERROR_MESSAGE);
+            Dialogs.error(e.getMessage(), "Error Deleting Group");
             return false;
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "An unexpected error occurred while deleting the group.", 
-                "Error", JOptionPane.ERROR_MESSAGE);
+            Dialogs.error("An unexpected error occurred while deleting the group.", "Error");
             return false;
         }
     }
