@@ -3,11 +3,11 @@ package controller;
 import model.Contact;
 import model.ContactManager;
 import model.GroupManager;
+import util.Dialogs;
 import util.FileManager;
 import view.GroupsFrame;
 
 import java.util.*;
-import javax.swing.JOptionPane;
 
 /**
  * Controller class responsible for managing contact-related operations.
@@ -57,11 +57,10 @@ public class ContactController {
             }
             return false;
         } catch (IllegalArgumentException e) {
-            JOptionPane.showMessageDialog(null, e.getMessage(), "Error Adding Contact", JOptionPane.ERROR_MESSAGE);
+            Dialogs.error(e.getMessage(), "Error Adding Contact");
             return false;
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "An unexpected error occurred while adding the contact.", 
-                "Error", JOptionPane.ERROR_MESSAGE);
+            Dialogs.error("An unexpected error occurred while adding the contact.", "Error");
             return false;
         }
     }
@@ -80,11 +79,10 @@ public class ContactController {
             fileManager.saveContacts(contactManager);
             return true;
         } catch (IllegalArgumentException e) {
-            JOptionPane.showMessageDialog(null, e.getMessage(), "Error Updating Contact", JOptionPane.ERROR_MESSAGE);
+            Dialogs.error(e.getMessage(), "Error Updating Contact");
             return false;
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "An unexpected error occurred while updating the contact.", 
-                "Error", JOptionPane.ERROR_MESSAGE);
+            Dialogs.error("An unexpected error occurred while updating the contact.", "Error");
             return false;
         }
     }
@@ -114,11 +112,10 @@ public class ContactController {
             }
             return false;
         } catch (IllegalArgumentException e) {
-            JOptionPane.showMessageDialog(null, e.getMessage(), "Error Deleting Contact", JOptionPane.ERROR_MESSAGE);
+            Dialogs.error(e.getMessage(), "Error Deleting Contact");
             return false;
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "An unexpected error occurred while deleting the contact.", 
-                "Error", JOptionPane.ERROR_MESSAGE);
+            Dialogs.error("An unexpected error occurred while deleting the contact.", "Error");
             return false;
         }
     }
